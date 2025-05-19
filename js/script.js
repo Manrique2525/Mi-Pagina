@@ -212,3 +212,30 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(typeWriter, index * 500 + 1000);
     });
 });
+
+// Animar habilidades cuando se ven en el viewport
+function animateSkills() {
+    const skillCards = document.querySelectorAll('.skill-card');
+    const observerOptions = {
+        threshold: 0.5
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const skillProgress = entry.target.querySelector('.skill-progress');
+                const percent = skillProgress.getAttribute('data-level');
+                skillProgress.style.width = percent + '%';
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    skillCards.forEach(card => {
+        observer.observe(card);
+    });
+}
+
+// Llamar a la función cuando el DOM esté cargado
+document.addEventListener('DOMContentLoaded', animateSkills);
